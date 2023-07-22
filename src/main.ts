@@ -1,5 +1,14 @@
-import { createApp } from 'vue';
-import './styles.css';
-import App from './App.vue';
+import './tailwind.css';
+import './assets/styles/main.css';
 
-createApp(App).mount('#app');
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+
+import App from './App.vue';
+import router from './router';
+
+createApp(App)
+  .provide<boolean>('IS_DEV', import.meta.env.DEV)
+  .use(router)
+  .use(createPinia())
+  .mount('#app');
