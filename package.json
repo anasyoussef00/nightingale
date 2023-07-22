@@ -8,9 +8,9 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "lint": "eslint --ext .js,.ts,.jsx,.tsx,.vue --ignore-path .eslintignore src",
-    "lint-fix": "eslint --ext .js,.ts,.jsx,.tsx,.vue --ignore-path .eslintignore --fix src",
-    "format": "prettier . --write"
+    "lint": "eslint --ext .js,.ts,.jsx,.tsx,.vue src",
+    "lint-fix": "eslint --ext .js,.ts,.jsx,.tsx,.vue --fix src",
+    "format": "prettier -w -u"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.4.0",
@@ -18,13 +18,10 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.4.0",
-    "@typescript-eslint/eslint-plugin": "^6.1.0",
-    "@typescript-eslint/parser": "^6.1.0",
     "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "eslint": "^8.45.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-vue": "^9.15.1",
     "prettier": "^3.0.0",
     "typescript": "^5.0.2",

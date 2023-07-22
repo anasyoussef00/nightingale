@@ -1,19 +1,25 @@
 {
   "root": true,
-  "parser": "vue-eslint-parser",
-  "parserOptions": {
-    "parser": "@typescript-eslint/parser"
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
   },
   "extends": [
-    "plugin:vue/strongly-recommended",
     "eslint:recommended",
-    "@vue/typescript/recommended",
-    "prettier"
+    "plugin:vue/vue3-recommended",
+    "@vue/eslint-config-typescript",
+    "@vue/eslint-config-prettier/skip-formatting"
   ],
-  "plugins": ["@typescript-eslint", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
   "rules": {
-    "prettier/prettier": "error",
-    // not needed for vue 3
-    "vue/no-multiple-template-root": "off"
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ]
   }
 }
