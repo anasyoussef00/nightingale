@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "devtools": "vue-devtools",
-    "tauri:dev": "run-p devtools \"tauri dev\"",
+    "tauri:dev": "run-p \"tauri dev\" devtools",
     "lint": "eslint --ext .js,.ts,.jsx,.tsx,.vue src",
     "lint-fix": "eslint --ext .js,.ts,.jsx,.tsx,.vue --fix src",
     "format": "prettier . -w -u"
