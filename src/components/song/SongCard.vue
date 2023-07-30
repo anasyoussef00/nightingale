@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import useSongStore from '@/stores/song/song';
 import { TSong } from '@/stores/song/types';
 import { ImgHTMLAttributes } from 'vue';
 
