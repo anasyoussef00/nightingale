@@ -7,6 +7,17 @@ const routes: RouteRecordRaw[] = [
     name: 'home',
     component: HomeView,
   },
+  {
+    path: '/songs',
+    name: 'songs',
+    children: [
+      {
+        path: 'recently-added-songs',
+        name: 'recently-added-songs',
+        component: () => import('@/views/songs/RecentlyAddedSongsView.vue'),
+      },
+    ],
+  },
 ];
 
 export default routes;

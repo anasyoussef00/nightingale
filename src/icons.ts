@@ -3,5 +3,13 @@ export {
   faSearch,
   faClock,
   faBook,
+  faMusic,
   faHeart,
+  faCirclePlay,
+  faPlus,
+  faForward,
+  faBackward,
+  faVolumeHigh,
+  faShuffle,
+  faRepeat,
 } from '@fortawesome/free-solid-svg-icons';

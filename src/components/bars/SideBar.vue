@@ -16,15 +16,16 @@ defineProps<{ logo: ImgHTMLAttributes['src'] }>();
       <div class="flex flex-col gap-y-1">
         <h2 class="text-xl font-bold text-white">Browse</h2>
         <SideBarRoutingBtn :to="{ name: 'home' }" label="Home" icon="home" />
-        <SideBarRoutingBtn label="Discover" icon="search" />
+        <SideBarRoutingBtn :to="{ name: 'home' }" label="Discover" icon="search" />
       </div>
     </div>
 
     <div class="flex flex-col gap-y-1">
       <h2 class="text-xl font-bold text-white">Your Library</h2>
-      <SideBarRoutingBtn label="Liked Songs" icon="heart" />
+      <SideBarRoutingBtn :to="{ name: 'home' }" label="Liked Songs" icon="heart" />
       <SideBarRoutingBtn :to="{ name: 'home' }" label="Playlists" icon="book" />
-      <SideBarRoutingBtn label="Recently Played" icon="clock" />
+      <SideBarRoutingBtn :to="{ name: 'recently-added-songs' }" label="Recently Added Songs" icon="music" />
+      <SideBarRoutingBtn :to="{ name: 'home' }" label="Recently Played" icon="clock" />
     </div>
   </div>
 </template>

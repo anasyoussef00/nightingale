@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::path::Path;
+use std::{fs::File, io::BufReader, path::Path};
 
 use menu::build_menu;
 use playlist::playlist::Playlist;
@@ -9,7 +9,7 @@ use tauri::{
     api::{
         dialog,
         dir::read_dir,
-        path::{audio_dir, local_data_dir},
+        path::{audio_dir, data_dir, local_data_dir},
     },
     Window,
 };
@@ -17,7 +17,6 @@ use tauri::{
 use crate::song::song::Song;
 
 mod menu;
-mod metadata;
 mod playlist;
 mod song;
 
@@ -31,10 +30,47 @@ fn song_selected(window: Window, song: Song) {
     window.emit("song-selected", song).unwrap();
 }
 
+#[tauri::command]
+fn fetch_added_songs() -> Vec<Song> {
+    let formatted_path = format!(
+        "{}/nightingale/songs.json",
+        local_data_dir().unwrap().display()
+    );
+    let path = Path::new(&formatted_path);
+
+    match File::open(path) {
+        Ok(file) => {
+            let reader = BufReader::new(file);
+
+            let songs: Vec<Song> = serde_json::from_reader(reader).unwrap();
+
+            songs
+        }
+        Err(_) => [].to_vec(),
+    }
+}
+
+#[tauri::command]
+fn toggle_song_like(song: Song) {
+    let found_song = song.clone().find_song().unwrap();
+    found_song.clone().toggle_song_like();
+
+    let data_file_path = data_dir().unwrap().join("/nightingale/songs.json");
+    let mut songs = song.read_from_local_data_file(&data_file_path).unwrap();
+    songs.retain(|s| s.path == song.path);
+    songs.push(found_song);
+    song::song::write_to_local_data_file(songs, data_file_path)
+}
+
 fn main() {
     let menu = build_menu();
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![playlist_selected, song_selected])
+        .invoke_handler(tauri::generate_handler![
+            playlist_selected,
+            song_selected,
+            fetch_added_songs,
+            toggle_song_like
+        ])
         .menu(menu)
         .on_menu_event(|event| match event.menu_item_id() {
             "open-single-file" => dialog::FileDialogBuilder::default()
@@ -43,7 +79,10 @@ fn main() {
                 .pick_file(move |path_buf| match path_buf {
                     Some(p) => {
                         if let Some(dir) = local_data_dir() {
-                            let song = Song::new(None, None, None, p);
+                            let song = Song {
+                                path: p,
+                                ..Default::default()
+                            };
                             let song_with_metadata = song.get_metadata().unwrap();
                             let formatted_path =
                                 format!("{}/nightingale/songs.json", dir.display());
@@ -63,9 +102,17 @@ fn main() {
                         if let Some(dir) = local_data_dir() {
                             let files = read_dir(&p, true).unwrap();
                             let mut songs: Vec<Option<Song>> = vec![];
-                            for file in files {
-                                let song = Song::new(None, None, None, file.path);
-                                songs.push(Some(song));
+                            for _file in files {
+                                let formatted_path =
+                                    format!("{}/nightingale/songs.json", dir.display());
+                                let path = Path::new(&formatted_path);
+                                let song = Song {
+                                    path: path.to_path_buf(),
+                                    ..Default::default()
+                                };
+                                let song_with_metadata = song.get_metadata().unwrap();
+
+                                songs.push(Some(song_with_metadata));
                             }
 
                             let playlist = Playlist::new(
